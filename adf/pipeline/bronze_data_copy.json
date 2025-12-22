@@ -48,7 +48,10 @@
 				"inputs": [
 					{
 						"referenceName": "MatchCSV",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"file_name": "1_Match_id_335987.csv"
+						}
 					}
 				],
 				"outputs": [

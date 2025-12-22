@@ -7,7 +7,8 @@
 		},
 		"parameters": {
 			"file_name": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "1_Match_id_335987"
 			}
 		},
 		"annotations": [],

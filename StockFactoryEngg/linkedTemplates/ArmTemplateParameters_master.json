@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "StockFactoryEngg"
+		},
+		"data_ipl_bronze_accountKey": {
+			"value": ""
+		},
+		"data_ipl_bronze_properties_typeProperties_url": {
+			"value": "https://ipldatastorage.dfs.core.windows.net/"
+		},
+		"file_watcher_properties_typeProperties_scope": {
+			"value": "/subscriptions/b36cb301-935a-4584-b953-bb276098e8d2/resourceGroups/StockDataEngg/providers/Microsoft.Storage/storageAccounts/ipldatastorage"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

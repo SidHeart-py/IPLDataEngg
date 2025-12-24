@@ -1,0 +1,20 @@
+{
+	"name": "TeamSink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "data_ipl_bronze",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Team",
+				"fileSystem": "bronze-external"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

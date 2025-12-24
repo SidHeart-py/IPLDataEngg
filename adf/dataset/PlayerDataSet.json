@@ -1,0 +1,53 @@
+{
+	"name": "PlayerDataSet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "data_ipl_bronze",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Player.csv",
+				"folderPath": "Players",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "PLAYER_SK",
+				"type": "String"
+			},
+			{
+				"name": "Player_Id",
+				"type": "String"
+			},
+			{
+				"name": "Player_Name",
+				"type": "String"
+			},
+			{
+				"name": "DOB",
+				"type": "String"
+			},
+			{
+				"name": "Batting_hand",
+				"type": "String"
+			},
+			{
+				"name": "Bowling_skill",
+				"type": "String"
+			},
+			{
+				"name": "Country_Name",
+				"type": "String"
+			}
+		]
+	}
+}

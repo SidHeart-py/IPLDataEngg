@@ -1,0 +1,10 @@
+{
+	"name": "IPLKeyVault",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://SecretIPL.vault.azure.net/"
+		}
+	}
+}

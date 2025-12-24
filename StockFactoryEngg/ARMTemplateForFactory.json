@@ -25,7 +25,90 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/bronze_data_copy')]",
+			"name": "[concat(parameters('factoryName'), '/ball_by_ball_pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy ball by ball match data",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "BallByBallMatchCSV",
+								"type": "DatasetReference",
+								"parameters": {
+									"file_name": "1_Match_id_335987.csv"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "BallByBallMatchPqt",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"file_name": {
+						"type": "String",
+						"defaultValue": "1_Match_id_335987"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/BallByBallMatchCSV')]",
+				"[concat(variables('factoryId'), '/datasets/BallByBallMatchPqt')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/match_pipeline')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -75,14 +158,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "MatchCSV",
+								"referenceName": "Match_result",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "MatchPqt",
+								"referenceName": "Match_result_sink",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -92,38 +175,15 @@
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
-				"variables": {
-					"file_name": {
-						"type": "String",
-						"defaultValue": "1_Match_id_335987"
-					}
-				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/MatchCSV')]",
-				"[concat(variables('factoryId'), '/datasets/MatchPqt')]"
+				"[concat(variables('factoryId'), '/datasets/Match_result')]",
+				"[concat(variables('factoryId'), '/datasets/Match_result_sink')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/data_ipl_bronze')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('data_ipl_bronze_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('data_ipl_bronze_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/MatchCSV')]",
+			"name": "[concat(parameters('factoryName'), '/BallByBallMatchCSV')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -161,7 +221,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/MatchPqt')]",
+			"name": "[concat(parameters('factoryName'), '/BallByBallMatchPqt')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -174,6 +234,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "Matches",
 						"fileSystem": "bronze-external"
 					},
 					"compressionCodec": "snappy"
@@ -185,6 +246,155 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Match_result')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "data_ipl_bronze",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"file_name": {
+						"type": "string",
+						"defaultValue": "335987_player_match.csv"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().file_name",
+							"type": "Expression"
+						},
+						"folderPath": "match_detail",
+						"fileSystem": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Match_SK",
+						"type": "String"
+					},
+					{
+						"name": "match_id",
+						"type": "String"
+					},
+					{
+						"name": "Team1",
+						"type": "String"
+					},
+					{
+						"name": "Team2",
+						"type": "String"
+					},
+					{
+						"name": "match_date",
+						"type": "String"
+					},
+					{
+						"name": "Season_Year",
+						"type": "String"
+					},
+					{
+						"name": "Venue_Name",
+						"type": "String"
+					},
+					{
+						"name": "City_Name",
+						"type": "String"
+					},
+					{
+						"name": "Country_Name",
+						"type": "String"
+					},
+					{
+						"name": "Toss_Winner",
+						"type": "String"
+					},
+					{
+						"name": "match_winner",
+						"type": "String"
+					},
+					{
+						"name": "Toss_Name",
+						"type": "String"
+					},
+					{
+						"name": "Win_Type",
+						"type": "String"
+					},
+					{
+						"name": "Outcome_Type",
+						"type": "String"
+					},
+					{
+						"name": "ManOfMach",
+						"type": "String"
+					},
+					{
+						"name": "Win_Margin",
+						"type": "String"
+					},
+					{
+						"name": "Country_id",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/data_ipl_bronze')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Match_result_sink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "data_ipl_bronze",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Match_details",
+						"fileSystem": "bronze-external"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/data_ipl_bronze')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/data_ipl_bronze')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('data_ipl_bronze_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('data_ipl_bronze_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/file_watcher')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -194,7 +404,7 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "bronze_data_copy",
+							"referenceName": "ball_by_ball_pipeline",
 							"type": "PipelineReference"
 						},
 						"parameters": {}
@@ -212,7 +422,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/bronze_data_copy')]"
+				"[concat(variables('factoryId'), '/pipelines/ball_by_ball_pipeline')]"
 			]
 		}
 	]

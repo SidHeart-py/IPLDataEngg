@@ -1,5 +1,5 @@
 {
-	"name": "BallByBallMatchPqt",
+	"name": "Match_result_sink",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "data_ipl_bronze",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "Matches",
+				"folderPath": "Match_details",
 				"fileSystem": "bronze-external"
 			},
 			"compressionCodec": "snappy"

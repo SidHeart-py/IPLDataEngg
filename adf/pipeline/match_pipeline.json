@@ -1,9 +1,9 @@
 {
-	"name": "ball_by_ball_pipeline",
+	"name": "match_pipeline",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy ball by ball match data",
+				"name": "Copy match data",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -47,27 +47,18 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "BallByBallMatchCSV",
-						"type": "DatasetReference",
-						"parameters": {
-							"file_name": "1_Match_id_335987.csv"
-						}
+						"referenceName": "Match_result",
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "BallByBallMatchPqt",
+						"referenceName": "Match_result_sink",
 						"type": "DatasetReference"
 					}
 				]
 			}
 		],
-		"variables": {
-			"file_name": {
-				"type": "String",
-				"defaultValue": "1_Match_id_335987"
-			}
-		},
 		"annotations": []
 	}
 }

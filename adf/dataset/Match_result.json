@@ -1,0 +1,102 @@
+{
+	"name": "Match_result",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "data_ipl_bronze",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"file_name": {
+				"type": "string",
+				"defaultValue": "335987_player_match.csv"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().file_name",
+					"type": "Expression"
+				},
+				"folderPath": "match_detail",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Match_SK",
+				"type": "String"
+			},
+			{
+				"name": "match_id",
+				"type": "String"
+			},
+			{
+				"name": "Team1",
+				"type": "String"
+			},
+			{
+				"name": "Team2",
+				"type": "String"
+			},
+			{
+				"name": "match_date",
+				"type": "String"
+			},
+			{
+				"name": "Season_Year",
+				"type": "String"
+			},
+			{
+				"name": "Venue_Name",
+				"type": "String"
+			},
+			{
+				"name": "City_Name",
+				"type": "String"
+			},
+			{
+				"name": "Country_Name",
+				"type": "String"
+			},
+			{
+				"name": "Toss_Winner",
+				"type": "String"
+			},
+			{
+				"name": "match_winner",
+				"type": "String"
+			},
+			{
+				"name": "Toss_Name",
+				"type": "String"
+			},
+			{
+				"name": "Win_Type",
+				"type": "String"
+			},
+			{
+				"name": "Outcome_Type",
+				"type": "String"
+			},
+			{
+				"name": "ManOfMach",
+				"type": "String"
+			},
+			{
+				"name": "Win_Margin",
+				"type": "String"
+			},
+			{
+				"name": "Country_id",
+				"type": "String"
+			}
+		]
+	}
+}

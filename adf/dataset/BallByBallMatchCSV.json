@@ -1,5 +1,5 @@
 {
-	"name": "MatchCSV",
+	"name": "BallByBallMatchCSV",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "data_ipl_bronze",

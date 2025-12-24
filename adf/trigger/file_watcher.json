@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "bronze_data_copy",
+					"referenceName": "ball_by_ball_pipeline",
 					"type": "PipelineReference"
 				}
 			}

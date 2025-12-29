@@ -58,6 +58,5 @@ dlt.create_auto_cdc_flow(
         keys=["Player_Id"],
         except_column_list=["insert_ts"],
         stored_as_scd_type=2,
-        sequence_by="insert_ts",
-        flow_name="gold_players_scd2"
+        sequence_by="insert_ts"
     )
